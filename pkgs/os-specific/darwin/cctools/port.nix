@@ -39,7 +39,6 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
                       "-headerpad_max_install_names";
-  configureFlags = ["LDFLAGS=-headerpad_max_install_names"];
   
   __propagatedImpureHostDeps = [
     # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
@@ -52,7 +51,10 @@ stdenv.mkDerivation {
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
   configurePlatforms = [ "build" "host" ]
     ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
-  configureFlags = [ "--disable-clang-as" ]
+  configureFlags = [ 
+    "--disable-clang-as"
+    "LDFLAGS=-headerpad_max_install_names" 
+  ]
     ++ lib.optionals enableTapiSupport [
       "--enable-tapi-support"
       "--with-libtapi=${libtapi}"
