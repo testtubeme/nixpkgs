@@ -619,6 +619,7 @@ rec {
         gettext = super.gettext.overrideAttrs (drv: {
           configureFlags = drv.configureFlags ++ [
             "--disable-curses"
+            "LDFLAGS=-headerpad_max_install_names"
           ];
         });
 
