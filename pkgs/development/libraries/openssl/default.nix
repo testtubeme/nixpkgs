@@ -94,7 +94,6 @@ let
     dontAddStaticConfigureFlags = true;
     configureFlags = [
       "shared" # "shared" builds both shared and static libraries
-      "LDFLAGS=-headerpad_max_install_names"
       "--libdir=lib"
       "--openssldir=etc/ssl"
     ] ++ lib.optionals withCryptodev [
@@ -107,7 +106,8 @@ let
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
-      ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared";
+      ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared"
+      ++lib.optionalString stdenv.isDarwin "LDFLAGS=-headerpad_max_install_names";
 
     makeFlags = [
       "MANDIR=$(man)/share/man"
@@ -119,6 +119,8 @@ let
     ];
     
     NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
+                      "-headerpad_max_install_names";
+    NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
                       "-headerpad_max_install_names";
 
     enableParallelBuilding = true;
