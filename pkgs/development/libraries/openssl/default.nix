@@ -120,8 +120,8 @@ let
     
     NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
                       "-headerpad_max_install_names";
-    NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
-                      "-headerpad_max_install_names";
+    NIX_LDFLAGS = lib.optional stdenv.isDarwin
+                      ["-headerpad_max_install_names"];
 
     enableParallelBuilding = true;
 
