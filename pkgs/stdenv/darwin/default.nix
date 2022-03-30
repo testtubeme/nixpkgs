@@ -393,7 +393,8 @@ rec {
     extraBuildInputs = [ ];
     libcxx = null;
   };
-
+  NIX_CFLAGS_LINK = "-headerpad_max_install_names";
+  NIX_LDFLAGS = "-headerpad_max_install_names";
   stage1 = prevStage:
     let
       persistent = self: super: with prevStage; {
