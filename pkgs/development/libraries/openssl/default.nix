@@ -94,6 +94,7 @@ let
     dontAddStaticConfigureFlags = true;
     configureFlags = [
       "shared" # "shared" builds both shared and static libraries
+      "LDFLAGS=-headerpad_max_install_names"
       "--libdir=lib"
       "--openssldir=etc/ssl"
     ] ++ lib.optionals withCryptodev [
@@ -116,6 +117,9 @@ let
       # This is done in ubuntu and archlinux, and possiibly many other distros.
       "MANSUFFIX=ssl"
     ];
+    
+    NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
+                      "-headerpad_max_install_names";
 
     enableParallelBuilding = true;
 
